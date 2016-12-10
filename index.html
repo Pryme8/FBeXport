@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>FBeXport</title>
+
+   <style>
+      html, body {
+         overflow: hidden;
+         width: 100%;
+         height: 100%;
+         margin: 0;
+         padding: 0;
+		 background:#46605A;
+		 font-family:Arial, Helvetica, sans-serif;
+		 color:white;
+		 text-shadow: 1px 1px black, 0px 1px black, 1px 0px black, -1px -1px black, -1px 0px black, 0px -1px black, 1px -1px black, -1px 1px black;
+		 letter-spacing:0.15em;
+		 line-height:1.35em;
+      }
+	  .window{
+		display:none;
+		position:fixed;
+		overflow:hidden;
+		top:50%;
+		left:50%;
+		transform:translate(-50%, -50%);
+		background:#8BAF92;
+		-webkit-border-radius: 7px;
+		border-radius: 7px;
+		-webkit-box-shadow: 0 0 5px 1px rgba(0,0,0,0.35);
+		box-shadow: 0 0 5px 1px rgba(0,0,0,0.35);
+				  
+	  }
+	  
+	  .window.active{
+		display:block;  
+	  }
+	  
+	  #start{
+		width:360px;
+		height:120px;  
+	  }
+	  
+	  #edit{
+		width:80%;
+		height:90%;  
+	  }
+	  
+	  #main-input{
+		display:block;
+		position:absolute;
+		top:50%;
+		left:50%;
+		transform:translate(-50%, -50%);
+		font-size:18px;
+		width:400px; 
+		text-align:center;
+	  }
+	  
+	  .pane{
+		display:block;
+		position:absolute;  
+	  }
+	  
+	  #info-pane{
+		width:calc(100% - 302px);
+		background:#D6D6D6;
+		color:#000;  
+		left:0;
+		top:0;
+		bottom:0;
+		overflow-y:auto;
+		text-shadow:none;
+		font-size:0.8em;
+		padding:0.2em 0.5em;
+		box-sizing:border-box;
+		-moz-box-sizing:border-box;
+		-webkit-box-sizing:border-box;
+	  }
+	  
+	  #scene-pane{
+		width:300px;
+		height:280px;
+		right:0;
+		top:0;
+		border:1px solid #666;  
+	  }
+	  
+
+   </style>
+
+<script src="./bjx.js"></script>
+
+</head>
+
+<body>
+<div class='main-wrap'>
+<div class='window active' id='start'>
+<div id='main-input'>
+<div>Please Select a FBX file.</div>
+<hr />
+<input id='fbxIn' type="file" accept="fbx" />
+<a id="downloadAnchorElem" style="display:none"></a>
+</div>
+</div>
+<div class='window' id='loading'>
+Loading...
+</div>
+<div class='window' id='edit'>
+<div class='pane' id='info-pane'>
+</div>
+<div class='pane' id='scene-pane'></div>
+</div>
+</div>
+
+<script>
+document.getElementById('fbxIn').addEventListener('change', function(e){
+	var bjx = new BJX({target:this});
+	console.log(bjx);
+}, false);
+</script>
+
+
+</body>
+</html>
