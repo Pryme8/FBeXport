@@ -84,15 +84,49 @@ BJX.prototype._parseRun = function(i, chain){
 		i++;
 		setTimeout(function(){self._parseRun(i, chain)},0);
 	}else{		
-		document.getElementById('info-pane').innerHTML = JSON.stringify(this.data);
-		BJX.changeWindow('edit', this);
+		
+		
 		console.log(this.data);
+		this._buildDom();
 	}
 };
 
 
+BJX.prototype._buildDom = function(){
+	var t = document.getElementById('info-pane');
+	if(typeof this.data['FBXHeaderExtension'] == 'object'){
+		var dom = this.createDomBlock(this.data['FBXHeaderExtension'], 'FBXHeaderExtension');
+		t.appendChild(dom);
+	}
+	
+	BJX.changeWindow('edit', this);
+};
 
 
+BJX.prototype.createDomBlock = function(o, dom){
+	console.log(o);
+	if(typeof dom == 'string'){
+		var d = document.createElement('div');	
+		d.setAttribute('class', 'item-block');
+		d.setAttribute('id', dom);
+		d.innerHTML = "<div class='item-head'>"+dom+"</div>";
+		dom = d;
+	}
+	var keys = Object.keys(o);
+	for(var i=0; i<keys.length; i++){
+		if(typeof o[keys[i]] == 'object'){
+			var it = this.createDomBlock(o[keys[i]], keys[i]);
+			dom.appendChild(it);	
+		}else{
+			var it = document.createElement('div');
+			it.setAttribute('class', 'item');
+			it.innerHTML = "<span class='tag'>"+keys[i]+"</span><span class='value'>"+o[keys[i]]+"</span>";
+			dom.appendChild(it);	
+		}
+	}
+	
+	return dom;
+};
 
 
 
