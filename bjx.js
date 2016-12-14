@@ -40,9 +40,11 @@ BJX.prototype._parseURI = function(){
 	var self = this;
 		this.reader.onload = function(progressEvent){
    			var response = this.result;
+			console.log(response);
 			response = (response.replace(/^;(.*)/gm, '')).split(/\r?\n/);
 			self.response = response;
 			self.data = new BJX.DATA();
+			
 			
 			self._parseRun(0, []);
 		
@@ -68,10 +70,19 @@ BJX.prototype._parseRun = function(i, chain){
 				var kVal = (ln.replace(/(:.*\{)/g, '')).replace(/\s/g, '');
 				chain.push(kVal);
 			} else {
-  				var kVal = /(.*)(:)(.*)/i;
+  				var kVal = /(.*:\s)(.*)/i;
 				kVal = kVal.exec(ln);
 				if(kVal){
-				var key = kVal[1].replace(/\s/g, ''); var val = kVal[3].replace(/\s/g, '')||"";
+				var key = kVal[1].replace(/\s|:/g, ''); var val = kVal[2].replace(/\s/g, '')||"";
+				console.log("KEY:"+key, "VALUE:"+val);
+				if(key == "P"){
+					var subKey = val.split(/,/g);
+					console.log(subKey);
+					var type = subKey[1];
+					key = subKey[0];
+					val = subKey[subKey.length-1];					
+				}
+				
 				var o = (eval("this.data"+(JSON.stringify(chain)).replace(/,/g, '][')));
 				o[key] = val;
 				}
@@ -98,6 +109,39 @@ BJX.prototype._buildDom = function(){
 		var dom = this.createDomBlock(this.data['FBXHeaderExtension'], 'FBXHeaderExtension');
 		t.appendChild(dom);
 	}
+	
+	if(typeof this.data['GlobalSettings'] == 'object'){
+		var dom = this.createDomBlock(this.data['GlobalSettings'], 'GlobalSettings');
+		t.appendChild(dom);
+	}
+	
+	if(typeof this.data['Documents'] == 'object'){
+		var dom = this.createDomBlock(this.data['Documents'], 'Documents');
+		t.appendChild(dom);
+	}
+	
+	if(typeof this.data['References'] == 'object'){
+		var dom = this.createDomBlock(this.data['References'], 'References');
+		t.appendChild(dom);
+	}
+	
+	
+	if(typeof this.data['Definitions'] == 'object'){
+		var dom = this.createDomBlock(this.data['Definitions'], 'Definitions');
+		t.appendChild(dom);
+	}
+	
+	if(typeof this.data['Objects'] == 'object'){
+		var dom = this.createDomBlock(this.data['Objects'], 'Objects');
+		t.appendChild(dom);
+	}
+	
+	if(typeof this.data['Connections'] == 'object'){
+		var dom = this.createDomBlock(this.data['Connections'], 'Connections');
+		t.appendChild(dom);
+	}
+	
+	
 	
 	BJX.changeWindow('edit', this);
 };
